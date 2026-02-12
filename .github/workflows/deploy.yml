@@ -1,0 +1,35 @@
+name: Deploy Telegram Bot
+
+on:
+  schedule:
+    - cron: '0 */4 * * *' # Повторяем каждые 4 часа
+  push:
+    branches:
+      - main # Также запускаем при пушах в ветку main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        if test -f requirements.txt; then
+          pip install -r requirements.txt
+        fi
+
+    - name: Run the bot
+      env:
+        TG_TOKEN: ${{ secrets.TG_TOKEN }}   # Токен Telegram-бота
+        VK_TOKEN: ${{ secrets.VK_TOKEN }}   # Токен VK API
+        GROUP_IDS: ${{ secrets.GROUP_IDS }} # Список групп (переменная строкового типа)
+      run: |
+        python bot.py
