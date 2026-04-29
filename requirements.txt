@@ -2,3 +2,6 @@ pyTelegramBotAPI
 vk_api
 python-dotenv
 flask
+selenium
+webdriver-manager
+undetected-chromedriver
